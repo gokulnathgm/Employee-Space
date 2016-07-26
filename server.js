@@ -28,6 +28,25 @@ app.post('/login', function(req, res) {
 	});
 });
 
+app.post('/signup', function(req, res) {
+	console.log(req.body);
+
+	var email = req.body.email;
+	var password = req.body.password;
+
+	var newEmployee = Employee({
+		email: email,
+		password: password
+	});
+
+	newEmployee.save(function(err, docs) {
+		if (err) throw err;
+
+		console.log('User created!');
+
+		res.json(docs);
+	});
+});
 
 app.listen(4000);
 console.log('app is running on PORT 4000');

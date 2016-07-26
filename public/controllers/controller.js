@@ -1,38 +1,50 @@
+var spaceApp = angular.module('spaceApp', ['ui.router']);
 
-var spaceApp = angular.module('spaceApp', ['ngRoute']);
+spaceApp.config(function($stateProvider, $urlRouterProvider) {
+	
+	$urlRouterProvider.otherwise('/');
 
-spaceApp.config(function($routeProvider) {
-	$routeProvider
-
-		.when('/', {
+	$stateProvider
+		.state('/', {
+			url: '/',
 			templateUrl: '../views/home.html',
 			controller: 'AppCtrl'
 		})
-		.otherwise({redirectTo: '/'});
-});
-
-spaceApp.controller('AppCtrl', function ($scope) {
-
-	console.log("Controller ready!");
-
-	/*$scope.login = function(id) {
-		console.log($scope.user);
-
-		$http.post('/login',$scope.user).success(function(response) {
-			console.log(response);
+		.state('profile', {
+			url: '/profile',
+			templateUrl: '../views/profile.html',
+			controller: 'AppCtrl'
 		});
-	};*/
-
 });
 
-/*function AppCtrl($scope, $http) {
+spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
 	console.log("Controller ready!");
 
-	$scope.login = function(id) {
+	$scope.login = function() {
 		console.log($scope.user);
 
-		$http.post('/login',$scope.user).success(function(response) {
-			console.log(response);
+		$http.post('/login', $scope.user).success(function(response) {
+			if (response != null) {
+				console.log("Successfully logged in!");
+				console.log(response);
+				$state.go('profile');
+			}
+
 		});
 	};
-}*/
+
+	$scope.signup = function() {
+		console.log($scope.user);
+
+		$http.post('/signup', $scope.user).success(function(response) {
+			console.log(response);
+
+			if (response != null) {
+				console.log("Successfully created new employee!");
+				$state.go('profile');
+			}
+		});
+	};
+
+});
+
