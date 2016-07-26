@@ -1,0 +1,14 @@
+{
+  "name": "es",
+  "version": "1.0.0",
+  "description": "Employee directory",
+  "main": "index.js",
+  "scripts": {
+    "test": "employee"
+  },
+  "author": "Gokul",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
