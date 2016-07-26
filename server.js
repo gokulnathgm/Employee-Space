@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
 	console.log("Received GET request");
 });
 
-/*app.post('/login', function(req, res) {
+app.post('/login', function(req, res) {
 	console.log(req.body);
 	var email = req.body.email;
 	var password = req.body.password;
@@ -26,7 +26,7 @@ app.get('/', function(req, res) {
 		console.log(user);
 		res.json(user);
 	});
-});*/
+});
 
 
 app.listen(4000);
