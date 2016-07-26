@@ -18,14 +18,15 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 });
 
 spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
-	console.log("Controller ready!");
+	console.log('Controller ready!');
 
 	$scope.login = function() {
+		console.log('Login called!');
 		console.log($scope.user);
 
 		$http.post('/login', $scope.user).success(function(response) {
 			if (response != null) {
-				console.log("Successfully logged in!");
+				console.log('Successfully logged in!');
 				console.log(response);
 				$state.go('profile');
 			}
@@ -34,16 +35,22 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
 	};
 
 	$scope.signup = function() {
+		console.log('Signup called!');
 		console.log($scope.user);
 
 		$http.post('/signup', $scope.user).success(function(response) {
 			console.log(response);
 
 			if (response != null) {
-				console.log("Successfully created new employee!");
+				console.log('Successfully created new employee!');
 				$state.go('profile');
 			}
 		});
+	};
+
+	$scope.update = function () {
+		console.log('Update called!');
+		console.log($scope.user);
 	};
 
 });

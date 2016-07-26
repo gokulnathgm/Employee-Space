@@ -1,24 +1,26 @@
 	<div class="jumbotron text-center" style="background-color:#e6e6e6;"><h3>Log in</h3></div>
 
 	<div class="container">
+	<form role="form" ng-submit="login()">
 		<div class="width-30" style="width:100%; display: flex; flex-direction:column;">
 			<div class="form-group">
 				<div class="col-md-4 col-md-offset-4">
-					<input type="text" class="form-control" id="inputEmail" placeholder="Email" ng-model="user.email">
+					<input type="email" class="form-control" id="inputEmail" placeholder="Email" ng-model="user.email" autocomplete="on" autofocus required>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-md-4 col-md-offset-4">
-					<input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password">
+					<input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
 				</div>
 			</div>
 			<div class="button-group" style="display:flex; flex-direction:column; align-items:center; justify-content: center;">
-				<div class="button1"  style="align-self:center;">
-					<button type="button" class="btn btn-primary" ng-click="login()" style="padding:10px; margin:10px;">Log In</button>
+				<div class="button1" style="align-self:center;">
+					<button type="submit" class="btn btn-primary" style="padding:10px; margin:10px;">Log In</button>
 				</div>
 				<div class="button2" style="align-self:center;">
 					<button type="button" class="btn btn-warning" ng-click="signup()" style="padding:10px; margin:10px;">Sign Up</button> 
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
