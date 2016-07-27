@@ -14,6 +14,16 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 			url: '/profile',
 			templateUrl: '../views/profile.html',
 			controller: 'AppCtrl'
+		})
+		.state('admin', {
+			url: '/admin',
+			templateUrl: '../views/adminLogin.html',
+			controller: 'AppCtrl'
+		})
+		.state('adminHome', {
+			url: '/adminHome',
+			templateUrl: '../views/adminHome.html',
+			controller: 'AdminCtrl'
 		});
 });
 
@@ -39,6 +49,9 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 				$state.go('profile');
 			}
 
+			else
+				console.log('Invalid credentials!');
+
 		});
 	};
 
@@ -52,7 +65,7 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 			if (response != null) {
 				console.log('Successfully created new employee!');
 				$state.go('profile');
-			}
+			}		
 		});
 	};
 
@@ -63,9 +76,37 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 
 	};
 
+	$scope.adminLogin = function() {
+		console.log($scope.admin);
+		if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin'){
+			console.log('Admin successfully logged in!');
+
+			/*$http.get('/employees').success(function(response) {
+				console.log(response);
+				$scope.employees = response;
+			});*/
+
+			$state.go('adminHome');
+		}
+	};
+
+});
+
+spaceApp.controller('AdminCtrl', function ($scope, $http, $state, user) {
+	$http.get('/employees').success(function(response) {
+	console.log(response);
+	$scope.employees = response;
+	});
+
+	$scope.fetchProfile = function(name) {
+		console.log(name);
+
+	};
 });
 
 spaceApp.service('user', function() {
 	return {};
 });
+
+
 

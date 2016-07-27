@@ -77,5 +77,14 @@ app.put('/update/:email', function(req, res) {
 		});
 });
 
+app.get('/employees', function(req, res) {
+	console.log('Fetching employee list...');
+	Employee.find({}, function(err, docs) {
+		if (err) throw err;
+		console.log(docs);
+		res.json(docs);
+	});
+});
+
 app.listen(4000);
 console.log('app is running on PORT 4000');
