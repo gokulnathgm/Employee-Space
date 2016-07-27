@@ -17,9 +17,9 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 		});
 });
 
-spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
+spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 	console.log('Controller ready!');
-
+	$scope.user = user;
 	$scope.login = function() {
 		console.log('Login called!');
 		console.log($scope.user);
@@ -28,6 +28,14 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
 			if (response != null) {
 				console.log('Successfully logged in!');
 				console.log(response);
+				$scope.user.name = response.name;
+				$scope.user.age = response.age;
+				$scope.user.skills = response.skills;
+				$scope.user.specialisation = response.specialisation;
+				$scope.user.experience = response.experience;
+				$scope.user.grade = response.grade;
+				$scope.user.joinDate = new Date(response.joinDate);
+
 				$state.go('profile');
 			}
 
@@ -51,7 +59,13 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state) {
 	$scope.update = function () {
 		console.log('Update called!');
 		console.log($scope.user);
+		$http.put('/update/' + $scope.user.email, $scope.user);
+
 	};
 
+});
+
+spaceApp.service('user', function() {
+	return {};
 });
 

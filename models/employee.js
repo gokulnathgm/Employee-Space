@@ -10,8 +10,9 @@ var employeeSchema = new Schema({
 	joinDate: Date,
 	experience: Number,
 	specialisation: String,
-	skills: Array,
-	age: Number
+	skills: String,
+	age: Number,
+	grade: String
 });
 
 var Employee = mongoose.model('employee', employeeSchema);

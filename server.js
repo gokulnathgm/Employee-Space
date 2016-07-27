@@ -13,6 +13,15 @@ app.use(bodyParser.json());
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/public/views/index.html');
 	console.log("Received GET request");
+
+	/*var newEmployee = Employee({
+		email: "gokulnath@qburst.com",
+		password: "user"
+	});
+	newEmployee.save(function(err) {
+		if (err) throw err;
+	});*/
+
 });
 
 app.post('/login', function(req, res) {
@@ -39,13 +48,33 @@ app.post('/signup', function(req, res) {
 		password: password
 	});
 
-	newEmployee.save(function(err, docs) {
-		if (err) throw err;
+	Employee.find({email: email}, function(err, docs) {
+		if (docs.length) {
+			console.log('Employee already exists!');
+		}
+		else {
+			newEmployee.save(function(err, docs) {
+			if (err) throw err;
 
-		console.log('User created!');
-
-		res.json(docs);
+			console.log('User created!');
+			res.json(docs);
+			});
+		}
 	});
+});
+
+app.put('/update/:email', function(req, res) {
+	console.log(req.params.email);
+	console.log(req.body);
+	var email = req.params.email;
+	var profile = req.body;
+
+	Employee.update(
+		{email: email},
+		{$set: profile}, function(err, docs) {
+			if (err) throw err;
+			console.log(docs);
+		});
 });
 
 app.listen(4000);
