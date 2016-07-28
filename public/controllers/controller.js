@@ -93,13 +93,19 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 });
 
 spaceApp.controller('AdminCtrl', function ($scope, $http, $state, user) {
+	$scope.showProfile = false;
 	$http.get('/employees').success(function(response) {
 	console.log(response);
 	$scope.employees = response;
 	});
 
-	$scope.fetchProfile = function(name) {
-		console.log(name);
+	$scope.fetchProfile = function(email) {
+		$scope.showProfile = true;
+		console.log(email);
+		$http.get('/employee/' + email).success(function (response) {
+			console.log(response);
+			$scope.profile = response;
+		});
 
 	};
 });

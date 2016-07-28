@@ -2,6 +2,7 @@ var express = require('express');
 var Employee = require('./models/employee');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var nodemon = require('nodemon');
 
 var app = express();
 
@@ -54,10 +55,10 @@ app.post('/signup', function(req, res) {
 		}
 		else {
 			newEmployee.save(function(err, docs) {
-			if (err) throw err;
+				if (err) throw err;
 
-			console.log('User created!');
-			res.json(docs);
+				console.log('User created!');
+				res.json(docs);
 			});
 		}
 	});
@@ -85,6 +86,18 @@ app.get('/employees', function(req, res) {
 		res.json(docs);
 	});
 });
+
+app.get('/employee/:email', function(req, res) {
+	console.log(req.params.email);
+	var email = req.params.email;
+	Employee.findOne({email: email}, function(err, user) {
+		if (err) throw err;
+
+		console.log(user);
+		res.json(user);
+	});
+
+})
 
 app.listen(4000);
 console.log('app is running on PORT 4000');
