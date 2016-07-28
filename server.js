@@ -57,11 +57,13 @@ app.post('/signup', function(req, res) {
 	Employee.find({email: email}, function(err, docs) {
 		if (docs.length) {
 			console.log('Employee already exists!');
+			res.json({'status': 'invalid'});
 		}
 		else {
 			newEmployee.save(function(err, docs) {
 				if (err) throw err;
 
+				req.session.user = docs;
 				console.log('User created!');
 				res.json(docs);
 			});
@@ -83,11 +85,22 @@ app.put('/update/:email', function(req, res) {
 			{email: email},
 			{$set: profile}, function(err, docs) {
 				if (err) throw err;
+
+				res.json(docs);
 				console.log(docs);
 			});
 	}
-	else
+	else{
 		console.log('Not logged in!');
+		res.json({'status':'unauthorised'});
+	}
+});
+
+app.post('/logout', function(req, res) {
+	req.session.destroy(function(err) {
+		if (err) throw err;
+		console.log(req.sesssion);
+	});
 });
 
 app.get('/employees', function(req, res) {

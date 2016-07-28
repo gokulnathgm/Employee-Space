@@ -62,7 +62,7 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user, ngToast) {
 				ngToast.create({
   			className: 'danger',
   			content: 'Invalid credentials!',
-  			//timeout: 100000
+  			timeout: 100000
 				});
 			}
 
@@ -75,25 +75,42 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user, ngToast) {
 
 		$http.post('/signup', $scope.user).success(function(response) {
 			console.log(response);
+			if (response.status == 'invalid'){
+				ngToast.create({
+  			className: 'info',
+  			content: 'Invalid credentials!',
+  			//timeout: 100000
+				});
+			}
 
-			if (response != null) {
+			else {
 				console.log('Successfully created new employee!');
 				$state.go('profile');
-			}		
+			}	
 		});
 	};
 
 	$scope.update = function () {
 		console.log('Update called!');
 		console.log($scope.user);
-		$http.put('/update/' + $scope.user.email, $scope.user);
+		$http.put('/update/' + $scope.user.email, $scope.user).success(function(response) {
+			console.log(response);
 
-		ngToast.create({
+			if(response.status == 'unauthorised')
+				$state.go('/');
+			else{
+				ngToast.create({
   			className: 'info',
   			content: 'Successfully updated!',
   			//timeout: 100000
 				});
+			}
+		});
 	};
+
+	$scope.logout = function () {
+		$http.post('logout');
+	}
 
 	$scope.adminLogin = function() {
 		console.log($scope.admin);
