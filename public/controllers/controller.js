@@ -1,4 +1,4 @@
-var spaceApp = angular.module('spaceApp', ['ui.router', 'angularUtils.directives.dirPagination']);
+var spaceApp = angular.module('spaceApp', ['ui.router', 'angularUtils.directives.dirPagination', 'ngToast']);
 
 spaceApp.config(function($stateProvider, $urlRouterProvider) {
 	
@@ -27,7 +27,15 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 		});
 });
 
-spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
+spaceApp.config(['ngToastProvider', function(ngToast) {
+    ngToast.configure({
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
+      maxNumber: 3
+    });
+  }]);
+
+spaceApp.controller('AppCtrl', function ($scope, $http, $state, user, ngToast) {
 	console.log('Controller ready!');
 	$scope.user = user;
 	$scope.login = function() {
@@ -49,8 +57,14 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 				$state.go('profile');
 			}
 
-			else
+			else{
 				console.log('Invalid credentials!');
+				ngToast.create({
+  			className: 'danger',
+  			content: 'Invalid credentials!',
+  			//timeout: 100000
+				});
+			}
 
 		});
 	};
@@ -74,6 +88,11 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user) {
 		console.log($scope.user);
 		$http.put('/update/' + $scope.user.email, $scope.user);
 
+		ngToast.create({
+  			className: 'info',
+  			content: 'Successfully updated!',
+  			//timeout: 100000
+				});
 	};
 
 	$scope.adminLogin = function() {
