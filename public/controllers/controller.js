@@ -1,4 +1,4 @@
-var spaceApp = angular.module('spaceApp', ['ui.router']);
+var spaceApp = angular.module('spaceApp', ['ui.router', 'angularUtils.directives.dirPagination']);
 
 spaceApp.config(function($stateProvider, $urlRouterProvider) {
 	

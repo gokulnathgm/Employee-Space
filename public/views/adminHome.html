@@ -1,4 +1,11 @@
 <!-- 	<div class="jumbotron text-center" style="background-color:#e6e6e6;"><h3>Admin Home</h3></div> -->
+<div style="margin-left:30px;margin-top:20px">
+	<form class="form-inline">
+		<div class="form-group">
+			<input type="text" ng-model="search" class="form-control" placeholder="Search">
+		</div>
+	</form>
+</div>
 <div class="container" style="width:100%; margin-top: 20px">
 
 	<div style="width:30%; display:inline-block; float:left;margin-left:10px">
@@ -9,7 +16,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="employee in employees">
+				<tr dir-paginate="employee in employees | filter:search | itemsPerPage:10">
 					<td><a href ng-click="fetchProfile(employee.email)" style="display:block;width:100%;text-decoration:none;color:black;">{{ employee.name }}</a></td>
 				</tr>
 			</tbody>
@@ -17,15 +24,15 @@
 	</div>
 
 	<div style="width:50%; display:inline-block;margin-left:20px;">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					Profile
-				</th>
-			</tr>
-		</thead>
-	</table>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						Profile
+					</th>
+				</tr>
+			</thead>
+		</table>
 		<!-- <table class="table">
 			<thead>
 				<tr>
@@ -57,17 +64,25 @@
 				</tr>
 			</tbody>
 		</table> -->
-<div ng-show="showProfile">
-	<ul class="list-group">
-  <li class="list-group-item"><strong>NAME: </strong>{{ profile.name }}</li>
-  <li class="list-group-item"><strong>email: </strong>{{ profile.email }}</li>
-  <li class="list-group-item"><strong>AGE: </strong>{{ profile.age }}</li>
-  <li class="list-group-item"><strong>GENDER: </strong>{{ profile.gender }}</li>
-  <li class="list-group-item"><strong>SPECIALISATION: </strong>{{ profile.specialisation }}</li>
-  <li class="list-group-item"><strong>SKILLS: </strong>{{ profile.skills }}</li>
-  <li class="list-group-item"><strong>GRADE: </strong>{{ profile.grade }}</li>
-  <li class="list-group-item"><strong>EXPERIENCE: </strong>{{ profile.experience }}</li>
-</ul>
-</div>
+		<div ng-show="showProfile">
+			<ul class="list-group">
+				<li class="list-group-item"><strong>NAME: </strong>{{ profile.name }}</li>
+				<li class="list-group-item"><strong>EMAIL: </strong>{{ profile.email }}</li>
+				<li class="list-group-item"><strong>AGE: </strong>{{ profile.age }}</li>
+				<li class="list-group-item"><strong>GENDER: </strong>{{ profile.gender }}</li>
+				<li class="list-group-item"><strong>SPECIALISATION: </strong>{{ profile.specialisation }}</li>
+				<li class="list-group-item"><strong>SKILLS: </strong>{{ profile.skills }}</li>
+				<li class="list-group-item"><strong>GRADE: </strong>{{ profile.grade }}</li>
+				<li class="list-group-item"><strong>EXPERIENCE: </strong>{{ profile.experience }}</li>
+			</ul>
+		</div>
 	</div>
+</div>
+
+<div style="margin-left:30px">
+<dir-pagination-controls
+max-size="5"
+direction-links="true"
+boundary-links="true" >
+</dir-pagination-controls>
 </div>
