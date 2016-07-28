@@ -2,7 +2,7 @@ var express = require('express');
 var Employee = require('./models/employee');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var nodemon = require('nodemon');
+var session = require('express-session');
 
 var app = express();
 
@@ -10,6 +10,7 @@ mongoose.connect('mongodb://localhost/employee-space');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
+app.use(session({secret: 'thisisahighlyclassifiedsupersecret', resave: false, saveUninitialized: true}));
 
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/public/views/index.html');
@@ -33,7 +34,11 @@ app.post('/login', function(req, res) {
 	Employee.findOne({email: email, password: password}, function(err, user) {
 		if (err) throw err;
 
+		if(user)
+			req.session.user = user;
+
 		console.log(user);
+		console.log(req.session);
 		res.json(user);
 	});
 });
@@ -65,17 +70,24 @@ app.post('/signup', function(req, res) {
 });
 
 app.put('/update/:email', function(req, res) {
-	console.log(req.params.email);
-	console.log(req.body);
-	var email = req.params.email;
-	var profile = req.body;
 
-	Employee.update(
-		{email: email},
-		{$set: profile}, function(err, docs) {
-			if (err) throw err;
-			console.log(docs);
-		});
+	if(req.session.user){
+		console.log('Already logged in!');
+	
+		console.log(req.params.email);
+		console.log(req.body);
+		var email = req.params.email;
+		var profile = req.body;
+
+		Employee.update(
+			{email: email},
+			{$set: profile}, function(err, docs) {
+				if (err) throw err;
+				console.log(docs);
+			});
+	}
+	else
+		console.log('Not logged in!');
 });
 
 app.get('/employees', function(req, res) {
