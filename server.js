@@ -75,7 +75,7 @@ app.put('/update/:email', function(req, res) {
 
 	if(req.session.user){
 		console.log('Already logged in!');
-	
+		
 		console.log(req.params.email);
 		console.log(req.body);
 		var email = req.params.email;
@@ -99,7 +99,9 @@ app.put('/update/:email', function(req, res) {
 app.post('/logout', function(req, res) {
 	req.session.destroy(function(err) {
 		if (err) throw err;
+
 		console.log(req.sesssion);
+		res.json({"status": "logged-out"});
 	});
 });
 
