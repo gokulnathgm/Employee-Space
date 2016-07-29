@@ -55,6 +55,7 @@ spaceApp.controller('AppCtrl', function ($scope, $http, $state, user, ngToast) {
 				$scope.user.joinDate = new Date(response.joinDate);
 
 				$state.go('profile');
+				ngToast.create('Successfully logged in!');
 			}
 
 			else{
