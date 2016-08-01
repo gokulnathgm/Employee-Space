@@ -8,22 +8,26 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 	.state('/', {
 		url: '/',
 		templateUrl: '../views/home.html',
-		controller: 'LoginCtrl'
+		controller: 'LoginCtrl',
+		authenticate: false
 	})
 	.state('profile', {
 		url: '/profile',
 		templateUrl: '../views/profile.html',
-		controller: 'ProfileCtrl'
+		controller: 'ProfileCtrl',
+		authenticate: true
 	})
 	.state('admin', {
 		url: '/admin',
 		templateUrl: '../views/adminLogin.html',
-		controller: 'AdminCtrl'
+		controller: 'AdminCtrl',
+		authenticate: false
 	})
 	.state('adminHome', {
 		url: '/adminHome',
 		templateUrl: '../views/adminHome.html',
-		controller: 'AdminHomeCtrl'
+		controller: 'AdminHomeCtrl',
+		authenticate: true
 	});
 });
 
@@ -56,6 +60,7 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 				$scope.user.experience = response.experience;
 				$scope.user.grade = response.grade;
 				$scope.user.joinDate = new Date(response.joinDate);
+				$scope.user.gender = response.gender;
 
 				$state.go('profile');
 				ngToast.create({
@@ -69,7 +74,6 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 				ngToast.create({
 					className: 'danger',
 					content: 'Invalid credentials!',
-					timeout: 100000
 				});
 			}
 
@@ -93,8 +97,7 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 					ngToast.create({
 						className: 'warning',
 						content: 'Employee already exists!'
-	  			//timeout: 100000
-	  		});
+					});
 				}
 
 				else {
@@ -110,11 +113,22 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 	};
 });
 
-spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields) {
-	
-	console.log('Profile controller ready!');
+spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields, authService) {
 	$scope.user = user;
-	console.log($scope.user);
+	authService.isAuthenticated()
+	.then(function(response) {
+		console.log(response);
+		$scope.user.name = response.user.name;
+		$scope.user.age = response.user.age;
+		$scope.user.skills = response.user.skills;
+		$scope.user.specialisation = response.user.specialisation;
+		$scope.user.experience = response.user.experience;
+		$scope.user.grade = response.user.grade;
+		$scope.user.joinDate = new Date(response.user.joinDate);
+		$scope.user.gender = response.user.gender;
+	});
+
+	console.log('Profile controller ready!');
 
 	$scope.update = function () {
 		console.log('Update called!');
@@ -133,8 +147,7 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
 				ngToast.create({
 					className: 'info',
 					content: 'Successfully updated!'
-  			//timeout: 100000
-  		});
+				});
 			}
 		});
 	};
@@ -159,14 +172,25 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
 
 	$scope.adminLogin = function() {
 		console.log($scope.admin);
-		if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin'){
+		if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin123'){
 			console.log('Admin successfully logged in!');
+			$http.post('/adminLogin', $scope.admin).success(function(response) {
+				console.log(response);
+			});
 			ngToast.create({
 				className: 'success',
 				content: 'Admin successfully logged in!'
 			});
 			$state.go('adminHome');
 		}
+
+		else{
+			ngToast.create({
+				className: 'danger',
+				content: 'Invalid credentials!'
+			});
+		}
+
 	};
 });
 
@@ -188,11 +212,58 @@ spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngTo
 	};
 
 	$scope.logoutAdmin = function() {
+
+		$http.post('/adminLogout').success(function(response) {
+			console.log(response);
+		})
+		
 		$state.go('admin');
 		ngToast.create({
 			className: 'info',
 			content: 'Admin logged out!'
 		});
+	}
+});
+
+spaceApp.run(function($rootScope, $state, authService) {
+	$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
+		if (toState.url == "/adminHome") {		
+			authService.isAuthenticated().
+			then(function(response) {
+				console.log(response);
+				if(toState.authenticate && !response.admin) {
+					console.log("Admin not authenticated!");
+					$state.transitionTo('admin');
+					event.preventDefault();
+				}
+			});
+		}
+
+		else {
+			authService.isAuthenticated().
+			then(function(response) {
+				console.log(response);
+				if(toState.authenticate && !response.user) {
+					console.log("User not authenticated!");
+					$state.transitionTo('/');
+					event.preventDefault();
+				}
+			});
+		}
+	});
+});
+
+spaceApp.service('authService', function($http, $q) {
+	this.isAuthenticated = function() {
+		var deferred = $q.defer();
+		$http.get('/checkAuthentication').success(function(response) {
+			console.log(response);
+			deferred.resolve(response);
+		})
+		.error(function(response) {
+			deferred.reject(response);
+		});
+		return deferred.promise;
 	}
 });
 
@@ -206,4 +277,4 @@ spaceApp.service('clearFields', function() {
 		user.password = "";
 		return user;
 	}
-})
+});

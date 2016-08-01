@@ -15,15 +15,6 @@ app.use(session({secret: 'thisisahighlyclassifiedsupersecret', resave: false, sa
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/public/views/index.html');
 	console.log("Received GET request");
-
-	/*var newEmployee = Employee({
-		email: "gokulnath@qburst.com",
-		password: "user"
-	});
-	newEmployee.save(function(err) {
-		if (err) throw err;
-	});*/
-
 });
 
 app.post('/login', function(req, res) {
@@ -123,8 +114,33 @@ app.get('/employee/:email', function(req, res) {
 		console.log(user);
 		res.json(user);
 	});
+});
 
-})
+app.get('/checkAuthentication', function(req, res) {
+	console.log(req.session);
+	if(req.session.user || req.session.admin) 
+		res.json(req.session);
+	else
+		res.json({"status": "not authenticated"});
+});
+
+app.post('/adminLogin', function(req, res) {
+	console.log('Setting admin session...');
+	var admin = req.body;
+	req.session.admin = admin;
+	console.log(req.session);
+	res.json(req.session);
+});
+
+app.post('/adminLogout', function(req, res) {
+	console.log('Destroying admin session...');
+	if (req.session.admin)
+		req.session.destroy(function(err) {
+			if (err) throw err;
+			console.log(req.session);
+			res.json({"status": "admin logged out"});
+		});
+});
 
 app.listen(4000);
 console.log('app is running on PORT 4000');
