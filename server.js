@@ -8,15 +8,31 @@ var app = express();
 
 mongoose.connect('mongodb://localhost/employee-space');
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/'));
+/*app.use(express.static(__dirname + '/app/public'));
+app.use(express.static(__dirname + '/app/public/styles'));
+app.use(express.static(__dirname + '/app/public/views'));
+app.use(express.static(__dirname + '/app/public/controllers'));*/
+
 app.use(bodyParser.json());
 app.use(session({secret: 'thisisahighlyclassifiedsupersecret', resave: false, saveUninitialized: true}));
 
+
+/*********************************************************
+Index template to be served template to be served
+*********************************************************/
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/public/views/index.html');
+	//res.sendFile(__dirname + '/app/public/views/index.html');
 	console.log("Received GET request");
 });
 
+
+/*********************************************************
+/login API checks for the existence of a user, if exists
+set the user session and returns the user object to the 
+controller
+*********************************************************/
 app.post('/login', function(req, res) {
 	console.log(req.body);
 	var email = req.body.email;
@@ -34,6 +50,12 @@ app.post('/login', function(req, res) {
 	});
 });
 
+
+/*********************************************************
+/signup API creates a new user, if the user doesn't exist,
+sets the user session and and returns the user object to 
+the controller
+*********************************************************/
 app.post('/signup', function(req, res) {
 	console.log(req.body);
 
@@ -62,6 +84,11 @@ app.post('/signup', function(req, res) {
 	});
 });
 
+
+/*********************************************************
+/update API updates the document of an already existing
+user and returns the modified user object to the controller
+*********************************************************/
 app.put('/update/:email', function(req, res) {
 
 	if(req.session.user){
@@ -87,6 +114,10 @@ app.put('/update/:email', function(req, res) {
 	}
 });
 
+
+/*********************************************************
+/logout API destroys the existing session 
+*********************************************************/
 app.post('/logout', function(req, res) {
 	req.session.destroy(function(err) {
 		if (err) throw err;
@@ -96,6 +127,12 @@ app.post('/logout', function(req, res) {
 	});
 });
 
+
+/*********************************************************
+/employees API fetches the entire list of employees from
+the mongo DB and returns the entire list of objects to
+the controller
+*********************************************************/
 app.get('/employees', function(req, res) {
 	console.log('Fetching employee list...');
 	Employee.find({}, function(err, docs) {
@@ -105,6 +142,12 @@ app.get('/employees', function(req, res) {
 	});
 });
 
+
+/*********************************************************
+/employee/email API fetches the entire document regarding 
+a particular employee and returns the result to the 
+controller
+*********************************************************/
 app.get('/employee/:email', function(req, res) {
 	console.log(req.params.email);
 	var email = req.params.email;
@@ -116,14 +159,11 @@ app.get('/employee/:email', function(req, res) {
 	});
 });
 
-app.get('/checkAuthentication', function(req, res) {
-	console.log(req.session);
-	if(req.session.user || req.session.admin) 
-		res.json(req.session);
-	else
-		res.json({"status": "not authenticated"});
-});
 
+/*********************************************************
+/adminLogin API creates an admin session and returns the 
+session object to the controller
+*********************************************************/
 app.post('/adminLogin', function(req, res) {
 	console.log('Setting admin session...');
 	var admin = req.body;
@@ -132,6 +172,11 @@ app.post('/adminLogin', function(req, res) {
 	res.json(req.session);
 });
 
+
+/*********************************************************
+/adminLogout API destroys the session and returns the 
+status to the controller
+*********************************************************/
 app.post('/adminLogout', function(req, res) {
 	console.log('Destroying admin session...');
 	if (req.session.admin)
@@ -141,6 +186,23 @@ app.post('/adminLogout', function(req, res) {
 			res.json({"status": "admin logged out"});
 		});
 });
+
+
+/*********************************************************
+/checkAuthentication API checks whether a user session or
+admin session is present and returns the session details
+if present, to the controller
+	*********************************************************/
+app.get('/checkAuthentication', function(req, res) {
+	console.log(req.session);
+	if(req.session.user || req.session.admin) 
+		res.json(req.session);
+	else
+		res.json({"status": "not authenticated"});
+});
+
+
+
 
 app.listen(4000);
 console.log('app is running on PORT 4000');
