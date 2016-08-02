@@ -1,16 +1,19 @@
-spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields, authService) {
+angular.module('spaceApp', [])
+.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields, authService) {
   $scope.user = user;
   authService.isAuthenticated()
   .then(function(response) {
     console.log(response);
-    $scope.user.name = response.user.name;
-    $scope.user.age = response.user.age;
-    $scope.user.skills = response.user.skills;
-    $scope.user.specialisation = response.user.specialisation;
-    $scope.user.experience = response.user.experience;
-    $scope.user.grade = response.user.grade;
-    $scope.user.joinDate = new Date(response.user.joinDate);
-    $scope.user.gender = response.user.gender;
+    if (response != "not authenticated") {
+      $scope.user.name = response.user.name;
+      $scope.user.age = response.user.age;
+      $scope.user.skills = response.user.skills;
+      $scope.user.specialisation = response.user.specialisation;
+      $scope.user.experience = response.user.experience;
+      $scope.user.grade = response.user.grade;
+      $scope.user.joinDate = new Date(response.user.joinDate);
+      $scope.user.gender = response.user.gender;
+    }
   });
 
   console.log('Profile controller ready!');
@@ -20,7 +23,6 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
     console.log($scope.user);
     $http.put('/update/' + $scope.user.email, $scope.user).success(function(response) {
       console.log(response);
-
       if(response.status == 'unauthorised'){
         $state.go('/');
         ngToast.create({

@@ -1,6 +1,6 @@
-spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) {
+angular.module('spaceApp', [])
+.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) {
   console.log('Admin controller ready!');
-
   $scope.adminLogin = function() {
     console.log($scope.admin);
     if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin123'){
@@ -14,7 +14,6 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
       });
       $state.go('adminHome');
     }
-
     else{
       ngToast.create({
         className: 'danger',

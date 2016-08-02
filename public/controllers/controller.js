@@ -1,9 +1,10 @@
 var spaceApp = angular.module('spaceApp', ['ui.router', 'angularUtils.directives.dirPagination', 'ngToast']);
 
-spaceApp.config(function($stateProvider, $urlRouterProvider) {
-	
-	$urlRouterProvider.otherwise('/');
 
+
+
+spaceApp.config(function($stateProvider, $urlRouterProvider) {	
+	$urlRouterProvider.otherwise('/');
 	$stateProvider
 	.state('/', {
 		url: '/',
@@ -31,6 +32,9 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 	});
 });
 
+
+
+
 spaceApp.config(['ngToastProvider', function(ngToast) {
 	ngToast.configure({
 		verticalPosition: 'bottom',
@@ -39,6 +43,9 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
 		timeout: 2000
 	});
 }]);
+
+
+
 
 spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast) {
 	console.log('Login controller ready!');
@@ -113,19 +120,25 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 	};
 });
 
+
+
+
+
 spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields, authService) {
 	$scope.user = user;
 	authService.isAuthenticated()
 	.then(function(response) {
 		console.log(response);
-		$scope.user.name = response.user.name;
-		$scope.user.age = response.user.age;
-		$scope.user.skills = response.user.skills;
-		$scope.user.specialisation = response.user.specialisation;
-		$scope.user.experience = response.user.experience;
-		$scope.user.grade = response.user.grade;
-		$scope.user.joinDate = new Date(response.user.joinDate);
-		$scope.user.gender = response.user.gender;
+		if (response.status != "not authenticated") {
+			$scope.user.name = response.user.name;
+			$scope.user.age = response.user.age;
+			$scope.user.skills = response.user.skills;
+			$scope.user.specialisation = response.user.specialisation;
+			$scope.user.experience = response.user.experience;
+			$scope.user.grade = response.user.grade;
+			$scope.user.joinDate = new Date(response.user.joinDate);
+			$scope.user.gender = response.user.gender;
+		}
 	});
 
 	console.log('Profile controller ready!');
@@ -135,7 +148,6 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
 		console.log($scope.user);
 		$http.put('/update/' + $scope.user.email, $scope.user).success(function(response) {
 			console.log(response);
-
 			if(response.status == 'unauthorised'){
 				$state.go('/');
 				ngToast.create({
@@ -167,9 +179,11 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
 	};
 });
 
+
+
+
 spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) {
 	console.log('Admin controller ready!');
-
 	$scope.adminLogin = function() {
 		console.log($scope.admin);
 		if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin123'){
@@ -183,7 +197,6 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
 			});
 			$state.go('adminHome');
 		}
-
 		else{
 			ngToast.create({
 				className: 'danger',
@@ -193,6 +206,9 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
 
 	};
 });
+
+
+
 
 spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngToast) {
 	console.log('Admin Home controller ready!');
@@ -205,18 +221,17 @@ spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngTo
 	$scope.fetchProfile = function(email) {
 		$scope.showProfile = true;
 		console.log(email);
-		$http.get('/employee/' + email).success(function (response) {
+		const obj = {"email": email};
+		$http.post('/employee', obj).success(function (response) {
 			console.log(response);
 			$scope.profile = response;
 		});
 	};
 
 	$scope.logoutAdmin = function() {
-
 		$http.post('/adminLogout').success(function(response) {
 			console.log(response);
-		})
-		
+		});
 		$state.go('admin');
 		ngToast.create({
 			className: 'info',
@@ -224,6 +239,9 @@ spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngTo
 		});
 	}
 });
+
+
+
 
 spaceApp.run(function($rootScope, $state, authService) {
 	$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
@@ -238,7 +256,6 @@ spaceApp.run(function($rootScope, $state, authService) {
 				}
 			});
 		}
-
 		else {
 			authService.isAuthenticated().
 			then(function(response) {
@@ -252,6 +269,9 @@ spaceApp.run(function($rootScope, $state, authService) {
 		}
 	});
 });
+
+
+
 
 spaceApp.service('authService', function($http, $q) {
 	this.isAuthenticated = function() {
@@ -267,9 +287,15 @@ spaceApp.service('authService', function($http, $q) {
 	}
 });
 
+
+
+
 spaceApp.service('user', function() {
 	return {};
 });
+
+
+
 
 spaceApp.service('clearFields', function() {
 	this.clearAll = function(user) {

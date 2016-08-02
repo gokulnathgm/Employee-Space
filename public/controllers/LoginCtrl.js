@@ -1,4 +1,5 @@
-spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast) {
+angular.module('spaceApp', [])
+.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast) {
   console.log('Login controller ready!');
   $scope.user = user;
   console.log($scope.user);
@@ -26,7 +27,6 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
           content: 'Successfully logged in!'
         });
       }
-
       else{
         console.log('Invalid credentials!');
         ngToast.create({
@@ -47,7 +47,6 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
         content: 'Either of the fields can\'t be empty!'
       });
     }
-
     else {
       $http.post('/signup', $scope.user).success(function(response) {
         console.log(response);
@@ -57,7 +56,6 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
             content: 'Employee already exists!'
           });
         }
-
         else {
           console.log('Successfully created new employee!');
           $state.go('profile');
