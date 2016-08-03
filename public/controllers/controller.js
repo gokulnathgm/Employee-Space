@@ -47,6 +47,36 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
 
 
 
+spaceApp.run(function($rootScope, $state, authService) {
+	$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
+		if (toState.url == "/adminHome") {		
+			authService.isAuthenticated().
+			then(function(response) {
+				console.log(response);
+				if(toState.authenticate && !response.admin) {
+					console.log("Admin not authenticated!");
+					$state.transitionTo('admin');
+					event.preventDefault();
+				}
+			});
+		}
+		else {
+			authService.isAuthenticated().
+			then(function(response) {
+				console.log(response);
+				if(toState.authenticate && !response.user) {
+					console.log("User not authenticated!");
+					$state.transitionTo('/');
+					event.preventDefault();
+				}
+			});
+		}
+	});
+});
+
+
+
+
 spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast) {
 	console.log('Login controller ready!');
 	$scope.user = user;
@@ -56,7 +86,7 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 		console.log('Login called!');
 		console.log($scope.user);
 
-		$http.post('/login', $scope.user).success(function(response) {
+		$http.post('/employee/login', $scope.user).success(function(response) {
 			if (response != null) {
 				console.log('Successfully logged in!');
 				console.log(response);
@@ -98,7 +128,7 @@ spaceApp.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast)
 		}
 
 		else {
-			$http.post('/signup', $scope.user).success(function(response) {
+			$http.post('/employee/signup', $scope.user).success(function(response) {
 				console.log(response);
 				if (response.status == 'invalid'){
 					ngToast.create({
@@ -146,7 +176,7 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
 	$scope.update = function () {
 		console.log('Update called!');
 		console.log($scope.user);
-		$http.put('/update/' + $scope.user.email, $scope.user).success(function(response) {
+		$http.put('/employee/update/' + $scope.user.email, $scope.user).success(function(response) {
 			console.log(response);
 			if(response.status == 'unauthorised'){
 				$state.go('/');
@@ -165,7 +195,7 @@ spaceApp.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast
 	};
 
 	$scope.logout = function () {
-		$http.post('logout').success(function(response) {
+		$http.post('/employee/logout').success(function(response) {
 			console.log(response.status);
 			if(response.status == 'logged-out'){
 				ngToast.create({
@@ -188,7 +218,7 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
 		console.log($scope.admin);
 		if ($scope.admin.email == 'admin' && $scope.admin.password == 'admin123'){
 			console.log('Admin successfully logged in!');
-			$http.post('/adminLogin', $scope.admin).success(function(response) {
+			$http.post('/admin/adminLogin', $scope.admin).success(function(response) {
 				console.log(response);
 			});
 			ngToast.create({
@@ -213,7 +243,7 @@ spaceApp.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) 
 spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngToast) {
 	console.log('Admin Home controller ready!');
 	$scope.showProfile = false;
-	$http.get('/employees').success(function(response) {
+	$http.get('/admin/employees').success(function(response) {
 		console.log(response);
 		$scope.employees = response;
 	});
@@ -222,14 +252,14 @@ spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngTo
 		$scope.showProfile = true;
 		console.log(email);
 		const obj = {"email": email};
-		$http.post('/employee', obj).success(function (response) {
+		$http.post('/admin/employee', obj).success(function (response) {
 			console.log(response);
 			$scope.profile = response;
 		});
 	};
 
 	$scope.logoutAdmin = function() {
-		$http.post('/adminLogout').success(function(response) {
+		$http.post('/admin/adminLogout').success(function(response) {
 			console.log(response);
 		});
 		$state.go('admin');
@@ -243,40 +273,11 @@ spaceApp.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngTo
 
 
 
-spaceApp.run(function($rootScope, $state, authService) {
-	$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-		if (toState.url == "/adminHome") {		
-			authService.isAuthenticated().
-			then(function(response) {
-				console.log(response);
-				if(toState.authenticate && !response.admin) {
-					console.log("Admin not authenticated!");
-					$state.transitionTo('admin');
-					event.preventDefault();
-				}
-			});
-		}
-		else {
-			authService.isAuthenticated().
-			then(function(response) {
-				console.log(response);
-				if(toState.authenticate && !response.user) {
-					console.log("User not authenticated!");
-					$state.transitionTo('/');
-					event.preventDefault();
-				}
-			});
-		}
-	});
-});
-
-
-
 
 spaceApp.service('authService', function($http, $q) {
 	this.isAuthenticated = function() {
 		var deferred = $q.defer();
-		$http.get('/checkAuthentication').success(function(response) {
+		$http.get('/employee/checkAuthentication').success(function(response) {
 			console.log(response);
 			deferred.resolve(response);
 		})

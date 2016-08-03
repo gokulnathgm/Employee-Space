@@ -1,5 +1,5 @@
 angular.module('spaceApp', [])
-.controller('LoginCtrl', function ($scope, $http, $state, user, ngToast) {
+.controller('LoginCtrl', ['$scope', '$http', 'user', '$state', 'ngToast', function ($scope, $http, $state, user, ngToast) {
   console.log('Login controller ready!');
   $scope.user = user;
   console.log($scope.user);
@@ -67,4 +67,4 @@ angular.module('spaceApp', [])
       });
     }
   };
-});
+}]);

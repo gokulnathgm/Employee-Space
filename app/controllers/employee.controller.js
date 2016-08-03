@@ -13,14 +13,11 @@ function signup(req, cb) {
 }
 
 function update(req, cb) {
+	console.log(req.params);
+	const email = req.params.email;
+	const profile = req.body;
 	if (req.session.user) {
-		console.log('User logged in!');
-		return 'logged in';
-	}
-
-	else {
-		console.log('User not logged in!');
-		return 'not logged in';
+		return Employee.update({email: email}, {$set: profile}, cb);
 	}
 }
 

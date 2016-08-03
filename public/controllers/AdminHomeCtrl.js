@@ -1,5 +1,5 @@
 angular.module('spaceApp', [])
-.controller('AdminHomeCtrl', function ($scope, $http, $state, user, ngToast) {
+.controller('AdminHomeCtrl', ['$scope', '$http', 'user', '$state', 'ngToast', function ($scope, $http, $state, user, ngToast) {
   console.log('Admin Home controller ready!');
   $scope.showProfile = false;
   $http.get('/employees').success(function(response) {
@@ -26,4 +26,4 @@ angular.module('spaceApp', [])
       content: 'Admin logged out!'
     });
   }
-});
+}]);

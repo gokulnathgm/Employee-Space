@@ -1,5 +1,5 @@
 angular.module('spaceApp', [])
-.controller('AdminCtrl', function($scope, $http, user, $state, ngToast) {
+.controller('AdminCtrl', ['$scope', '$http', 'user', '$state', 'ngToast', function($scope, $http, user, $state, ngToast) {
   console.log('Admin controller ready!');
   $scope.adminLogin = function() {
     console.log($scope.admin);
@@ -22,4 +22,4 @@ angular.module('spaceApp', [])
     }
 
   };
-});
+}]);

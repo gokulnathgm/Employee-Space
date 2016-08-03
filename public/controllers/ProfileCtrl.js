@@ -1,5 +1,5 @@
 angular.module('spaceApp', [])
-.controller('ProfileCtrl' ,function($scope, $http, user, $state, ngToast, clearFields, authService) {
+.controller('ProfileCtrl', ['$scope', '$http', 'user', '$state', 'ngToast', 'authService', 'clearFields', function($scope, $http, user, $state, ngToast, clearFields, authService) {
   $scope.user = user;
   authService.isAuthenticated()
   .then(function(response) {
@@ -52,4 +52,4 @@ angular.module('spaceApp', [])
       }
     });
   };
-});
+}]);
