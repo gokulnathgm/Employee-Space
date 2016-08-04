@@ -9,6 +9,8 @@ const app = express();
 mongoose.connect('mongodb://localhost/employee-space');
 
 app.use(express.static('public'));
+app.use('/bower_components', express.static('bower_components'));
+
 app.use(bodyParser.json());
 app.use(session({secret: 'thisisahighlyclassifiedsupersecret', resave: false, saveUninitialized: true}));
 require('./app/routes')(app);

@@ -1,7 +1,6 @@
 var spaceApp = angular.module('spaceApp', ['ui.router', 
 	'angularUtils.directives.dirPagination', 'ngToast', 'loginController', 
-	'profileController', 'adminController', 'adminHomeController', 'authenticationService', 
-	'clearFieldsService', 'userService']);
+	'profileController', 'adminController', 'adminHomeController', 'authenticationService']);
 
 
 spaceApp.config(function($stateProvider, $urlRouterProvider) {	

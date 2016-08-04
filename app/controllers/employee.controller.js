@@ -1,6 +1,5 @@
 const Employee = require('../models/employee');
 
-
 function login(req, cb) {
 	const email = req.body.email;
 	const password = req.body.password;
@@ -21,11 +20,11 @@ function update(req, cb) {
 	}
 }
 
-function employees(req, cb) {
+function getEmployees(req, cb) {
 	return Employee.find({}, cb);
 }
 
-function employee(req, cb) {
+function getEmployee(req, cb) {
 	return Employee.findOne({email: req.params.email}, cb);
 }
 
@@ -33,6 +32,6 @@ module.exports = {
 	login: login,
 	signup: signup,
 	update: update,
-	employees: employees,
-	employee: employee
+	getEmployees: getEmployees,
+	getEmployee: getEmployee
 };

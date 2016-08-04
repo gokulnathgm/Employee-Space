@@ -21,19 +21,19 @@ router.post('/adminLogout', function(req, res) {
 	}
 });
 
-router.get('/employees', function(req, res) {
- employeeController.employees(req, function(err, docs) {
-	if (err) {
-		throw err;
-	}
-	console.log('Employees: ' + docs);
-	res.json(docs);
-});
+router.get('/getEmployees', function(req, res) {
+	employeeController.getEmployees(req, function(err, docs) {
+		if (err) {
+			throw err;
+		}
+		console.log('Employees: ' + docs);
+		res.json(docs);
+	});
 });
 
-router.get('/employee/:email', function(req, res) {
+router.get('/getEmployee/:email', function(req, res) {
 	console.log('email: ' + req.params.email);
-	employeeController.employee(req, function(err, user) {
+	employeeController.getEmployee(req, function(err, user) {
 		if (err) {
 			throw err;
 		}

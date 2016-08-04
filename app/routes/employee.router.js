@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const employeeController = require('../controllers/employee.controller');
+const Employee = require('../models/employee');
 
 router.post('/login', function(req, res) {
 	employeeController.login(req, function(err, user) {
@@ -34,12 +35,40 @@ router.post('/logout', function(req, res) {
 
 router.get('/checkAuthentication', function(req, res) {
   console.log(req.session);
-    if(req.session.user || req.session.admin) {
-      res.json(req.session);
+  if(req.session.user || req.session.admin) {
+    res.json(req.session);
+  }
+  else {
+    res.json({"status": "not authenticated"});
+  }
+});
+
+router.post('/signup', function(req, res) {
+  console.log('body: ' + req.body);
+  employeeController.signup(req, function(err, docs) {
+    if (err) {
+      throw err;
+    }
+    if(docs.length) {
+      res.json({"status" : "invalid"});
     }
     else {
-      res.json({"status": "not authenticated"});
+      const newEmployee = Employee({
+        email: req.body.email, 
+        password: req.body.password
+      });  
+      newEmployee.save(function (error, response) {
+        if (error) {
+          throw error;
+        }
+        else {
+          req.session.user = response;
+          res.json(response);
+        }
+      });
     }
+
+  });
 });
 
 module.exports = router;
