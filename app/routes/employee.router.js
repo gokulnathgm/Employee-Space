@@ -11,8 +11,8 @@ router.post('/login', function(req, res) {
 	});
 });
 
-router.put('/update/:email', function(req, res) {
-  console.log(req.params.email);
+router.put('/update', function(req, res) {
+  console.log(req.session.user.email);
   employeeController.update(req, function(err, docs) {
     if (err) {
       throw err;

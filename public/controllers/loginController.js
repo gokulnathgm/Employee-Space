@@ -1,14 +1,16 @@
-angular.module('spaceApp', [])
-.controller('LoginCtrl', ['$scope', '$http', 'user', '$state', 'ngToast', function ($scope, $http, $state, user, ngToast) {
+angular.module('loginController', [])
+.controller('LoginCtrl', ['$scope', '$state', '$http', 'authService', 'user', 'ngToast', 
+  function ($scope, $state, $http, authService, user, ngToast) {
+
   console.log('Login controller ready!');
-  $scope.user = user;
+  console.log(spaceApp.user);
+  $scope.user = spaceApp.user;
   console.log($scope.user);
 
   $scope.login = function() {
     console.log('Login called!');
     console.log($scope.user);
-
-    $http.post('/login', $scope.user).success(function(response) {
+    $http.post('/employee/login', $scope.user).success(function(response) {
       if (response != null) {
         console.log('Successfully logged in!');
         console.log(response);
@@ -48,7 +50,7 @@ angular.module('spaceApp', [])
       });
     }
     else {
-      $http.post('/signup', $scope.user).success(function(response) {
+      $http.post('/employee/signup', $scope.user).success(function(response) {
         console.log(response);
         if (response.status == 'invalid'){
           ngToast.create({

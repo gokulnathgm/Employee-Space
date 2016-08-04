@@ -14,7 +14,7 @@ function signup(req, cb) {
 
 function update(req, cb) {
 	console.log(req.params);
-	const email = req.params.email;
+	const email = req.session.user.email;
 	const profile = req.body;
 	if (req.session.user) {
 		return Employee.update({email: email}, {$set: profile}, cb);
@@ -26,7 +26,7 @@ function employees(req, cb) {
 }
 
 function employee(req, cb) {
-	return Employee.findOne({email: req.body.email}, cb);
+	return Employee.findOne({email: req.params.email}, cb);
 }
 
 module.exports = {
