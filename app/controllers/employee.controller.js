@@ -8,7 +8,25 @@ function login(req, cb) {
 
 function signup(req, cb) {
 	const email = req.body.email;
-	return Employee.find({email: email}, cb);
+	const password = req.body.password;
+	Employee.find({email: email}, function(err, user) {
+		if (user.length) {
+			console.log('user exists');
+		}
+		else {
+			const newEmployee = Employee({
+				email: email,
+				password: password
+			});
+			newEmployee.save(function(error, response) {
+				if (error) {
+					throw error;
+				}
+				console.log('response ctrl: ' + response);
+				return cb(null, response);
+			});
+		}
+	});
 }
 
 function update(req, cb) {
