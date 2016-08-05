@@ -11,7 +11,7 @@ function signup(req, cb) {
 	const password = req.body.password;
 	Employee.find({email: email}, function(err, user) {
 		if (user.length) {
-			console.log('user exists');
+			return cb(null, null);
 		}
 		else {
 			const newEmployee = Employee({
@@ -22,7 +22,6 @@ function signup(req, cb) {
 				if (error) {
 					throw error;
 				}
-				console.log('response ctrl: ' + response);
 				return cb(null, response);
 			});
 		}
@@ -30,7 +29,6 @@ function signup(req, cb) {
 }
 
 function update(req, cb) {
-	console.log(req.params);
 	const email = req.session.user.email;
 	const profile = req.body;
 	if (req.session.user) {

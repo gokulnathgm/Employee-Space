@@ -13,12 +13,11 @@ router.post('/login', function(req, res) {
 });
 
 router.put('/update', function(req, res) {
-	console.log(req.session.user.email);
 	employeeController.update(req, function(err, docs) {
 		if (err) {
 			throw err;
 		}
-		console.log(docs);
+		req.session.user = req.body;
 		res.json(docs);
 	});
 });
@@ -28,13 +27,11 @@ router.post('/logout', function(req, res) {
 		if (err) {
 			throw err;
 		}
-		console.log('Session destroyed!');
 		res.json({"status": "logged-out"});
 	});
 });
 
 router.get('/checkAuthentication', function(req, res) {
-	console.log(req.session);
 	if(req.session.user || req.session.admin) {
 		res.json(req.session);
 	}
@@ -44,20 +41,18 @@ router.get('/checkAuthentication', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
-	console.log('body: ' + req.body);
-  employeeController.signup(req, function(err, docs) {
-  	if (err) {
-  		throw err;
-  	}
-  	console.log('response router: ' + docs);
-  	if (docs) {
-  		req.session.user = docs;
-  		res.json(docs);
-  	}
-  	else {
-  		res.json({"status": "invalid"});
-  	}
-  });
+	employeeController.signup(req, function(err, docs) {
+		if (err) {
+			throw err;
+		}
+		if (docs) {
+			req.session.user = docs;
+			res.json(docs);
+		}
+		else {
+			res.json({"status": "invalid"});
+		}
+	});
 });
 
 module.exports = router;

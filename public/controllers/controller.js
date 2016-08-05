@@ -2,7 +2,6 @@ var spaceApp = angular.module('spaceApp', ['ui.router',
 	'angularUtils.directives.dirPagination', 'ngToast', 'loginController', 
 	'profileController', 'adminController', 'adminHomeController', 'authenticationService']);
 
-
 spaceApp.config(function($stateProvider, $urlRouterProvider) {	
 	$urlRouterProvider.otherwise('/');
 	$stateProvider
@@ -32,8 +31,6 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
 	});
 });
 
-
-
 spaceApp.config(['ngToastProvider', function(ngToast) {
 	ngToast.configure({
 		verticalPosition: 'bottom',
@@ -43,28 +40,21 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
 	});
 }]);
 
-
-
 spaceApp.run(function($rootScope, $state, authService) {
 	$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
 		if (toState.url == "/adminHome") {		
 			authService.isAuthenticated().
 			then(function(response) {
-				console.log(response);
 				if(toState.authenticate && !response.admin) {
-					console.log("Admin not authenticated!");
 					$state.transitionTo('admin');
 					event.preventDefault();
 				}
 			});
 		}
 		else {
-			console.log('Run function checking authentication');
 			authService.isAuthenticated().
 			then(function(response) {
-				console.log(response);
 				if(toState.authenticate && !response.user) {
-					console.log("User not authenticated!");
 					$state.transitionTo('/');
 					event.preventDefault();
 				}
