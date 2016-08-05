@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const employeeController = require('../controllers/employee.controller');
-const Employee = require('../models/employee');
 
 router.post('/login', function(req, res) {
 	employeeController.login(req, function(err, user) {

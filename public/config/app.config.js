@@ -1,4 +1,4 @@
-var spaceApp = angular.module('spaceApp', ['ui.router', 
+const spaceApp = angular.module('spaceApp', ['ui.router', 
 	'angularUtils.directives.dirPagination', 'ngToast', 'loginController', 
 	'profileController', 'adminController', 'adminHomeController', 'authenticationService']);
 

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const employeeController = require('../controllers/employee.controller');
+const adminController = require('../controllers/admin.controller');
 
 router.post('/adminLogin', function(req, res) {
 	req.session.admin = req.body;
@@ -18,7 +18,7 @@ router.post('/adminLogout', function(req, res) {
 });
 
 router.get('/getEmployees', function(req, res) {
-	employeeController.getEmployees(req, function(err, docs) {
+	adminController.getEmployees(req, function(err, docs) {
 		if (err) {
 			throw err;
 		}
@@ -27,7 +27,7 @@ router.get('/getEmployees', function(req, res) {
 });
 
 router.get('/getEmployee/:email', function(req, res) {
-	employeeController.getEmployee(req, function(err, user) {
+	adminController.getEmployee(req, function(err, user) {
 		if (err) {
 			throw err;
 		}
