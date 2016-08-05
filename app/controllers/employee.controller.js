@@ -1,13 +1,13 @@
 const Employee = require('../models/employee');
 
 function login(req, cb) {
-	const email = req.body.email;
+  const email = req.body.email;
 	const password = req.body.password;
 	return Employee.findOne({email: email, password: password}, cb);
 }
 
 function signup(req, cb) {
-	const email = req.body.email;
+  const email = req.body.email;
 	const password = req.body.password;
 	Employee.find({email: email}, function(err, user) {
 		if (user.length) {
