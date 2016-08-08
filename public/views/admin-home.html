@@ -1,0 +1,74 @@
+<nav class="navbar navbar-inverse" style="margin-bottom:0;">
+  <div class="container-fluid" style="background-color:#3385ff;">
+    <div class="navbar-header" style="display:inline-block">
+      <a class="navbar-brand" style="color:FFFFFF;" href="#">Employee Space</a>
+
+    </div>
+    <button style="float:right;" class="btn btn-warning navbar-btn" type="button" ng-click="logoutAdmin()">Logout</button>
+  </div>
+
+</nav>
+
+<div style="margin-left:30px;margin-top:20px">
+  <form class="form-inline">
+    <div>
+      <span class="glyphicon glyphicon-search"></span>
+      <input style="width:200px;" type="text" ng-model="search" class="form-control" placeholder="Search"  ng-change="changed()">
+    </div>
+  </form>
+</div>
+
+<div class="container" style="width:100%; margin-top:20px; display:flex;
+flex-direction:row;justify-content: center;">
+
+<div style="width:40%; display:inline-block;margin-right:10px">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Employee</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr dir-paginate="employee in employees | filter:search | itemsPerPage:10">
+        <td><a href ng-click="fetchProfile(employee.email)" style="display:block;width:100%;text-decoration:none;color:#4d4d4d;">{{ employee.name }}<span style="font-size:12px;
+          font-style:italic;float:right">{{ employee.email}}</span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="width:40%; display:inline-block;margin-left:10px">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            Profile
+          </th>
+        </tr>
+      </thead>
+    </table>
+    <div ng-show="showProfile">
+      <ul class="list-group" style="word-wrap: break-word;">
+        <li class="list-group-item"><strong>NAME: </strong>{{ profile.name }}</li>
+        <li class="list-group-item"><strong>EMAIL: </strong>{{ profile.email }}</li>
+        <li class="list-group-item"><strong>AGE: </strong>{{ profile.age }}</li>
+        <li class="list-group-item"><strong>GENDER: </strong>{{ profile.gender }}</li>
+        <li class="list-group-item"><strong>SPECIALISATION: </strong>{{ profile.specialisation }}</li>
+        <li class="list-group-item"><strong>SKILLS: </strong>{{ profile.skills }}</li>
+        <li class="list-group-item"><strong>GRADE: </strong>{{ profile.grade }}</li>
+        <li class="list-group-item"><strong>EXPERIENCE: </strong>{{ profile.experience }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div style="margin-left:20px">
+  <dir-pagination-controls
+  max-size="5"
+  direction-links="true"
+  boundary-links="true" >
+</dir-pagination-controls>
+</div>
+
+<toast>
+</toast>

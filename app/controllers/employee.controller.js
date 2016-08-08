@@ -25,7 +25,7 @@ function update(req, cb) {
 }
 
 module.exports = {
-	login: login,
-	signup: signup,
-	update: update
+  login: login,
+  signup: signup,
+  update: update
 };
