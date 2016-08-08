@@ -1,6 +1,14 @@
 angular.module('profileController', [])
-.controller('ProfileCtrl', ['$scope', '$state', '$http', 'authService', 'ngToast', 
-  function($scope, $state, $http, authService, ngToast) {
+.controller('ProfileCtrl', [
+  '$scope', 
+  '$state', 
+  '$http', 
+  'authService', 
+  'ngToast', 
+  'employeeUpdateService', 
+  'employeeLogoutService', 
+  function($scope, $state, authService, ngToast, 
+    employeeUpdateService, employeeLogoutService) {
     
     $scope.property = true;
     $scope.user = {};
@@ -19,7 +27,7 @@ angular.module('profileController', [])
     });
     
     $scope.update = function () {
-      $http.put('/employee/update', $scope.user).success(function(response) {
+      employeeUpdateService.employeeUpdate($scope.user, function(response) {
         if(response.status == 'unauthorised'){
           $state.go('/');
           ngToast.create({
@@ -37,7 +45,7 @@ angular.module('profileController', [])
     };
 
     $scope.logout = function () {
-      $http.post('/employee/logout').success(function(response) {
+      employeeLogoutService.employeeLogout(function(response) {
         if(response.status == 'logged-out'){
           ngToast.create({
             className: 'info',
@@ -47,8 +55,4 @@ angular.module('profileController', [])
         }
       });
     };
-
-    $scope.enable = function() {
-      $scope.property = false;
-    }
   }]);

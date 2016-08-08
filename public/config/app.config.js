@@ -6,7 +6,9 @@ const spaceApp = angular.module('spaceApp', [
   'profileController', 
   'adminController', 
   'adminHomeController', 
-  'authenticationService'
+  'authenticationService', 
+  'employeeService',
+  'adminService'
   ]);
 
 spaceApp.config(function($stateProvider, $urlRouterProvider) {  

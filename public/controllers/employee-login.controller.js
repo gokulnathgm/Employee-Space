@@ -1,9 +1,16 @@
 angular.module('loginController', [])
-.controller('LoginCtrl', ['$scope', '$state', '$http', 'authService', 'ngToast', 
-  function ($scope, $state, $http, authService, ngToast) {
+.controller('LoginCtrl', [
+  '$scope', 
+  '$state', 
+  'authService', 
+  'ngToast', 
+  'employeeLoginService', 
+  'employeeSignupService', 
+  function ($scope, $state, authService, ngToast, 
+    employeeLoginService, employeeSignupService) {
 
     $scope.login = function() {
-      $http.post('/employee/login', $scope.user).success(function(response) {
+      employeeLoginService.employeeLogin($scope.user, function(response) {
         if (response != null) {
           $scope.user.name = response.name;
           $scope.user.age = response.age;
@@ -37,7 +44,7 @@ angular.module('loginController', [])
         });
       }
       else {
-        $http.post('/employee/signup', $scope.user).success(function(response) {
+        employeeSignupService.employeeSignup($scope.user, function(response) {
           if (response.status == 'invalid'){
             ngToast.create({
               className: 'warning',
