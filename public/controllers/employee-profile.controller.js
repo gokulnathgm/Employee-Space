@@ -1,8 +1,7 @@
 angular.module('profileController', [])
 .controller('ProfileCtrl', [
   '$scope', 
-  '$state', 
-  '$http', 
+  '$state',  
   'authService', 
   'ngToast', 
   'employeeUpdateService', 
