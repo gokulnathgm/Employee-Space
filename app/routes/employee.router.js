@@ -2,7 +2,8 @@ const router = require('express').Router();
 const employeeController = require('../controllers/employee.controller');
 
 router.post('/login', function(req, res) {
-  employeeController.login(req, function(err, user) {
+  const user = {email: req.body.email, password: req.body.password};
+  employeeController.login(user, function(err, user) {
     if (err) {
       throw err;
     }
@@ -12,7 +13,8 @@ router.post('/login', function(req, res) {
 });
 
 router.put('/update', function(req, res) {
-  employeeController.update(req, function(err, docs) {
+  const user = {email: req.session.user.email, profile: req.body};
+  employeeController.update(user, function(err, docs) {
     if (err) {
       throw err;
     }
@@ -40,7 +42,8 @@ router.get('/checkAuthentication', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
-  employeeController.signup(req, function(err, docs) {
+  const user = {email: req.body.email, password: req.body.password};
+  employeeController.signup(user, function(err, docs) {
     if (err) {
       throw err;
     }

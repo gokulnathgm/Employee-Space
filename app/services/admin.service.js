@@ -1,6 +1,6 @@
 const Employee = require('../models/employee.model');
 
-function findAllEmployees(req, cb) {
+function findAllEmployees(cb) {
   Employee.find({}, function(err, docs) {
     if (err) {
       throw err;
@@ -11,8 +11,7 @@ function findAllEmployees(req, cb) {
   });
 }
 
-function findEmployee(req, cb) {
-  const email = req.params.email;
+function findEmployee(email, cb) {
   Employee.findOne({email: email}, function(err, res) {
     if (err) {
       throw err;

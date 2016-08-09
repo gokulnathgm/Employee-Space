@@ -1,9 +1,7 @@
 const Employee = require('../models/employee.model');
 
-function findOne(req, cb) {
-  const email = req.body.email;
-  const password = req.body.password;
-  Employee.findOne({email: email, password: password}, function(err, res) {
+function findOne(user, cb) {
+  Employee.findOne(user, function(err, res) {
     if (err) {
       throw err;
     }
@@ -13,9 +11,9 @@ function findOne(req, cb) {
   });
 }
 
-function checkAndRegister(req, cb) {
-  const email = req.body.email;
-  const password = req.body.password;
+function checkAndRegister(user, cb) {
+  const email = user.email;
+  const password = user.password;
   Employee.find({email: email}, function(err, user) {
     if (user.length) {
       return cb(null, null);
@@ -34,17 +32,15 @@ function checkAndRegister(req, cb) {
   });
 }
 
-function updateProfile(req, cb) {
-  const email = req.session.user.email;
-  const profile = req.body;
-  if (req.session.user) {
-    Employee.update({email: email}, {$set: profile}, function(err, res) {
-      if (err) {
-        throw err;
-      }
-      return cb(null, res);
-    });
-  }
+function updateProfile(user, cb) {
+  const email = user.email;
+  const profile = user.profile;
+  Employee.update({email: email}, {$set: profile}, function(err, res) {
+    if (err) {
+      throw err;
+    }
+    return cb(null, res);
+  });
 }
 
 module.exports = {

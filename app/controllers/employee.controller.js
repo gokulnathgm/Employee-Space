@@ -1,13 +1,13 @@
 const employeeService = require('../services/employee.service');
 
-function login(req, cb) {
-  employeeService.findOne(req, function(err ,res) {
+function login(user, cb) {
+  employeeService.findOne(user, function(err ,res) {
     return cb(null, res);
   });
 }
 
-function signup(req, cb) {
-  employeeService.checkAndRegister(req, function(err, res) {
+function signup(user, cb) {
+  employeeService.checkAndRegister(user, function(err, res) {
     if (err) {
       throw err;
     }
@@ -15,8 +15,8 @@ function signup(req, cb) {
   });
 }
 
-function update(req, cb) {
-  employeeService.updateProfile(req, function(err, res) {
+function update(user, cb) {
+  employeeService.updateProfile(user, function(err, res) {
     if (err) {
       throw err;
     }

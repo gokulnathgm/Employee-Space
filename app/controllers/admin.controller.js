@@ -1,7 +1,7 @@
 const adminService = require('../services/admin.service');
 
-function getEmployees(req, cb) {
-  adminService.findAllEmployees(req, function(err, res) {
+function getEmployees(cb) {
+  adminService.findAllEmployees(function(err, res) {
     if (err) {
       throw err;
     }
@@ -9,8 +9,8 @@ function getEmployees(req, cb) {
   });
 }
 
-function getEmployee(req, cb) {
-  adminService.findEmployee(req, function(err, res) {
+function getEmployee(email, cb) {
+  adminService.findEmployee(email, function(err, res) {
     if (err) {
       throw err;
     }

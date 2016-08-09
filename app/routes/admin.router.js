@@ -18,7 +18,7 @@ router.post('/adminLogout', function(req, res) {
 });
 
 router.get('/getEmployees', function(req, res) {
-  adminController.getEmployees(req, function(err, docs) {
+  adminController.getEmployees(function(err, docs) {
     if (err) {
       throw err;
     }
@@ -27,7 +27,8 @@ router.get('/getEmployees', function(req, res) {
 });
 
 router.get('/getEmployee/:email', function(req, res) {
-  adminController.getEmployee(req, function(err, user) {
+  const email = req.params.email;
+  adminController.getEmployee(email, function(err, user) {
     if (err) {
       throw err;
     }
