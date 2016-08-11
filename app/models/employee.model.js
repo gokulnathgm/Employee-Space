@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var employeeSchema = new Schema({
+const employeeSchema = new Schema({
   name: String,
   gender: String,
   email: String,
@@ -15,6 +15,6 @@ var employeeSchema = new Schema({
   grade: String
 });
 
-var Employee = mongoose.model('employee', employeeSchema);
+const Employee = mongoose.model('employee', employeeSchema);
 
 module.exports = Employee;
