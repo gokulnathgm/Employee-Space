@@ -5,8 +5,9 @@ module.exports = function(shipit) {
     default: {
       workspace: '/home/Gokul/space-workspace', 
       deployTo: '/home/Gokul/space-deploy', 
-      repositoryUrl: 'https://github.com/gokulnathgm/Employee-Space', 
-      ignores: ['.git', 'node_modules'],
+      repositoryUrl: 'git@codebase.qburst.com:gokulnath/employee-space.git', 
+      branch: 'space-pre-alpha',
+      ignores: ['.git', 'node_modules', 'bower_components'],
       rsync: ['--del'],
       keepReleases: 2,
       key: '~/.ssh/id_rsa',
@@ -15,5 +16,21 @@ module.exports = function(shipit) {
     staging: {
       servers: 'Gokul@localhost'
     }
+  });
+
+  shipit.blTask('npm-install', function() {
+    return shipit.remote("cd " + shipit.currentPath + " && npm install");
+  });
+
+  shipit.blTask('bower-install', function() {
+    return shipit.remote("cd " + shipit.currentPath + " && npm install bower");
+  });
+
+  shipit.blTask('start-server', function() {
+    return shipit.remote("cd " + shipit.currentPath + " && node server.js");
+  });
+
+  shipit.on('deployed', function () {
+    shipit.start('npm-install', 'bower-install', 'start-server');
   });
 };

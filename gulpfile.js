@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const nodemon = require('gulp-nodemon');
 const env = require('gulp-env');
 const fs = require('fs');
+const exec = require('child_process').exec;
 
 gulp.task('set-env', function () {
   if(fs.existsSync('./env.json')) {
@@ -26,3 +27,11 @@ gulp.task('dev-space', [
   'set-env',
   'dev-server'
   ]);
+
+gulp.task('deploy', function(cb) {
+  exec('shipit staging deploy', function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
+});

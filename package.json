@@ -15,6 +15,7 @@
     "gulp": "^3.9.1",
     "gulp-env": "^0.4.0",
     "gulp-nodemon": "^2.1.0",
+    "shipit-captain": "^0.4.3",
     "shipit-cli": "^1.4.1",
     "shipit-deploy": "^2.2.0"
   }
