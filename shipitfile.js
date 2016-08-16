@@ -6,7 +6,7 @@ module.exports = function(shipit) {
       workspace: '/home/Gokul/space-workspace', 
       deployTo: '/home/Gokul/space-deploy', 
       repositoryUrl: 'git@codebase.qburst.com:gokulnath/employee-space.git', 
-      branch: 'space-pre-alpha',
+      branch: 'master',
       ignores: ['.git', 'node_modules', 'bower_components'],
       rsync: ['--del'],
       keepReleases: 2,
@@ -27,7 +27,7 @@ module.exports = function(shipit) {
   });
 
   shipit.blTask('start-server', function() {
-    return shipit.remote("cd " + shipit.currentPath + " && node server.js");
+    return shipit.remote("cd " + shipit.currentPath + " && pm2 start pm2/pm2-stag.json");
   });
 
   shipit.on('deployed', function () {
