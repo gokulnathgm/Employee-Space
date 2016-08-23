@@ -24,8 +24,20 @@ function update(user, cb) {
   });
 }
 
+function verify(user, cb) {
+  employeeService.verifyUser(user, function(err, res) {
+    if (err) {
+      throw err;
+    }
+    else {
+      return cb(null, res);
+    }
+  });
+}
+
 module.exports = {
   login: login,
   signup: signup,
-  update: update
+  update: update,
+  verify: verify
 };

@@ -12,7 +12,8 @@ const employeeSchema = new Schema({
   specialisation: String,
   skills: String,
   age: Number,
-  grade: String
+  grade: String,
+  verified: {type: Boolean, default: false}
 });
 
 const Employee = mongoose.model('employee', employeeSchema);

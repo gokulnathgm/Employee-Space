@@ -12,20 +12,29 @@ angular.module('loginController', [])
     $scope.login = function() {
       employeeLoginService.employeeLogin($scope.user, function(response) {
         if (response != null) {
-          $scope.user.name = response.name;
-          $scope.user.age = response.age;
-          $scope.user.skills = response.skills;
-          $scope.user.specialisation = response.specialisation;
-          $scope.user.experience = response.experience;
-          $scope.user.grade = response.grade;
-          $scope.user.joinDate = new Date(response.joinDate);
-          $scope.user.gender = response.gender;
+          if(response.status == 'pending verification') {
+            ngToast.create({
+              className: 'info',
+              content: 'Please verify your account!',
+            });
+          }
 
-          $state.go('profile');
-          ngToast.create({
-            className: 'success',
-            content: 'Successfully logged in!'
-          });
+          else {
+            $scope.user.name = response.name;
+            $scope.user.age = response.age;
+            $scope.user.skills = response.skills;
+            $scope.user.specialisation = response.specialisation;
+            $scope.user.experience = response.experience;
+            $scope.user.grade = response.grade;
+            $scope.user.joinDate = new Date(response.joinDate);
+            $scope.user.gender = response.gender;
+
+            $state.go('profile');
+            ngToast.create({
+              className: 'success',
+              content: 'Successfully logged in!'
+            });
+          }
         }
         else{
           ngToast.create({
@@ -45,19 +54,18 @@ angular.module('loginController', [])
       }
       else {
         employeeSignupService.employeeSignup($scope.user, function(response) {
-          if (response.status == 'invalid'){
+          if (response.status == 'invalid') {
             ngToast.create({
               className: 'warning',
               content: 'Employee already exists!'
             });
           }
-          else {
-            $state.go('profile');
+          if (response.status == 'pending verification') {
             ngToast.create({
-              className: 'success',
-              content: 'Successfully created new employee!'
+              className: 'info',
+              content: 'Please verify your account!'
             });
-          } 
+          }
         });
       }
     };
