@@ -35,9 +35,33 @@ function verify(user, cb) {
   });
 }
 
+function password(user, cb) {
+  employeeService.resetPassword(user, function(err, res) {
+    if (err) {
+      throw err;
+    }
+    else {
+      return cb(null, res);
+    }
+  });
+}
+
+function newpassword(user, cb) {
+  employeeService.changePassword(user, function(err, res) {
+    if (err) {
+      throw err;
+    }
+    else {
+      return cb(null, res);
+    }
+  });
+}
+
 module.exports = {
   login: login,
   signup: signup,
   update: update,
-  verify: verify
+  verify: verify,
+  password: password,
+  newpassword: newpassword
 };

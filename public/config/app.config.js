@@ -6,7 +6,8 @@ const spaceApp = angular.module('spaceApp', [
   'loginController', 
   'profileController', 
   'adminController', 
-  'adminHomeController', 
+  'adminHomeController',
+  'forgotPasswordController',  
   'authenticationService', 
   'employeeService',
   'adminService'
@@ -38,7 +39,13 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: '../views/admin-home.html',
     controller: 'AdminHomeCtrl',
     authenticate: true
-  });
+  })
+  .state('forgotPassword', {
+    url: '/forgotPassword', 
+    templateUrl: '../views/forgot-password.html', 
+    controller: 'ForgotPasswordCtrl',
+    authenticate: false
+  })
 });
 
 spaceApp.config(['ngToastProvider', function(ngToast) {

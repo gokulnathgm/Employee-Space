@@ -31,3 +31,13 @@ employeeService.service('employeeLogoutService' , function($http) {
     });
   }
 });
+
+employeeService.service('employeeResetService', function($http) {
+  this.passwordReset = function(email, cb) {
+    const emailObj = {email: email};
+    $http.post('/employee/password', emailObj).success(function(response) {
+      console.log(response);
+      return cb(response);
+    });
+  }
+});

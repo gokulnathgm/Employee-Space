@@ -31,7 +31,6 @@ function checkAndRegister(user, cb) {
           throw error;
         }
         else {
-
           const smtpTransport = nodemailer.createTransport('SMTP', {
             service: 'Gmail',
             auth: {
@@ -39,14 +38,12 @@ function checkAndRegister(user, cb) {
               pass: 'adminemployeespace'
             }
           });
-
           const mailOptions = {
             to: email,
             subject: 'Employee Space signup confirmation',
             text: 'Please confirm your identity!',
             html:  '<b><a href=' + newUrl + '>Click here to verify your account</a></b>'
           }
-
           smtpTransport.sendMail(mailOptions, function(error, response) {
             if (error) {
               throw error
@@ -84,9 +81,53 @@ function verifyUser(user, cb) {
   });
 }
 
+function resetPassword(user, cb) {
+  console.log('email: ' + user.email);
+  console.log('url: ' + user.url);
+  const newUrl = user.url;
+  const email = user.email;
+  const smtpTransport = nodemailer.createTransport('SMTP', {
+    service: 'Gmail',
+    auth: {
+      user: 'employee.handler@gmail.com',
+      pass: 'adminemployeespace'
+    }
+  });
+  const mailOptions = {
+    to: email,
+    subject: 'Employee Space reset password',
+    text: 'Reset to your new password here!',
+    html:  '<b><a href=' + newUrl + '>Click here to reset your password</a></b>'
+  }
+  smtpTransport.sendMail(mailOptions, function(error, response) {
+    if (error) {
+      throw error
+    }
+    else {
+      console.log('Mail sent!!');
+      return cb(null, response);
+    }
+  });
+}
+
+function changePassword(user, cb) {
+  const email = user.email;
+  const password = user.password;
+  Employee.update({email: email}, {password: password}, function (err, res) {
+    if (err) {
+      throw err;
+    }
+    else {
+      return cb(null, res);
+    }
+  });
+}
+
 module.exports = {
   findOne: findOne,
   checkAndRegister: checkAndRegister,
   updateProfile: updateProfile,
-  verifyUser: verifyUser
+  verifyUser: verifyUser,
+  resetPassword: resetPassword,
+  changePassword: changePassword
 };
