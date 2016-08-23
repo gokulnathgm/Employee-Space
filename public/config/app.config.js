@@ -1,7 +1,8 @@
 const spaceApp = angular.module('spaceApp', [
   'ui.router', 
   'angularUtils.directives.dirPagination', 
-  'ngToast', 
+  'ngToast',
+  'angularSpinner', 
   'loginController', 
   'profileController', 
   'adminController', 
@@ -47,6 +48,10 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
     maxNumber: 3,
     timeout: 2000
   });
+}]);
+
+spaceApp.config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
+    usSpinnerConfigProvider.setDefaults({color: '#3385ff'});
 }]);
 
 spaceApp.run(function($rootScope, $state, authService) {

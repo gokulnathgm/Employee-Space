@@ -1,12 +1,14 @@
 angular.module('loginController', [])
 .controller('LoginCtrl', [
+  '$rootScope', 
   '$scope', 
   '$state', 
   'authService', 
-  'ngToast', 
+  'ngToast',
+  'usSpinnerService', 
   'employeeLoginService', 
   'employeeSignupService', 
-  function ($scope, $state, authService, ngToast, 
+  function ($rootScope, $scope, $state, authService, ngToast, usSpinnerService,  
     employeeLoginService, employeeSignupService) {
 
     $scope.login = function() {
@@ -15,7 +17,7 @@ angular.module('loginController', [])
           if(response.status == 'pending verification') {
             ngToast.create({
               className: 'info',
-              content: 'Please verify your account!',
+              content: 'Please verify your newly created account!',
             });
           }
 
@@ -46,6 +48,9 @@ angular.module('loginController', [])
     };
 
     $scope.signup = function() {
+
+
+
       if ($scope.user == null || $scope.user.email == "" || $scope.user.password == "" || $scope.user.email == null || $scope.user.password == null) {
         ngToast.create({
           className: 'warning',
@@ -53,7 +58,15 @@ angular.module('loginController', [])
         });
       }
       else {
+        if (!$scope.spinneractive) {
+          usSpinnerService.spin('spinner-1');
+        }
         employeeSignupService.employeeSignup($scope.user, function(response) {
+          if ($scope.spinneractive) {
+            usSpinnerService.stop('spinner-1');
+          }
+          $scope.spinneractive = false;
+
           if (response.status == 'invalid') {
             ngToast.create({
               className: 'warning',
@@ -63,10 +76,17 @@ angular.module('loginController', [])
           if (response.status == 'pending verification') {
             ngToast.create({
               className: 'info',
-              content: 'Please verify your account!'
+              content: 'Please verify your newly created account!'
             });
           }
         });
       }
     };
+    $rootScope.$on('us-spinner:spin', function(event, key) {
+      $scope.spinneractive = true;
+    });
+
+    $rootScope.$on('us-spinner:stop', function(event, key) {
+      $scope.spinneractive = false;
+    });
   }]);  
