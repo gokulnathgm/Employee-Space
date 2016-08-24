@@ -1,3 +1,4 @@
+const path = require('path');
 const router = require('express').Router();
 const employeeController = require('../controllers/employee.controller');
 
@@ -110,7 +111,7 @@ router.post('/password', function(req, res) {
 });
 
 router.get('/password/reset', function(req, res) {
-  res.sendFile(__dirname + '/reset-password.html');
+  res.sendFile(path.join(__dirname, '../../public/views', 'reset-password.html'));
 });
 
 router.post('/newpassword', function(req, res) {
