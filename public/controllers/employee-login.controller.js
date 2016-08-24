@@ -22,6 +22,13 @@ angular.module('loginController', [])
             });
           }
 
+          else if (response.status == 'invalid user') {
+            ngToast.create({
+              className: 'danger',
+              content: 'Invalid credentials!',
+            });
+          }
+
           else {
             $scope.user.name = response.name;
             $scope.user.age = response.age;
@@ -38,12 +45,6 @@ angular.module('loginController', [])
               content: 'Successfully logged in!'
             });
           }
-        }
-        else{
-          ngToast.create({
-            className: 'danger',
-            content: 'Invalid credentials!',
-          });
         }
       });
     };

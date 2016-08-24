@@ -8,7 +8,7 @@ angular.module('profileController', [])
   'employeeLogoutService', 
   function($scope, $state, authService, ngToast, 
     employeeUpdateService, employeeLogoutService) {
-    
+
     $scope.property = true;
     $scope.user = {};
     authService.isAuthenticated()
@@ -26,21 +26,30 @@ angular.module('profileController', [])
     });
     
     $scope.update = function () {
-      employeeUpdateService.employeeUpdate($scope.user, function(response) {
-        if(response.status == 'unauthorised'){
-          $state.go('/');
-          ngToast.create({
-            className: 'warning',
-            content: 'You should log in first!'
-          });
-        }
-        else{
-          ngToast.create({
-            className: 'info',
-            content: 'Successfully updated!'
-          });
-        }
-      });
+      if ($scope.newPassword != $scope.newPasswordConfirm) {
+        ngToast.create({
+          className: 'danger',
+          content: 'Passwords missmatch!'
+        });
+      }
+      else {
+        $scope.user.password = $scope.newPassword;
+        employeeUpdateService.employeeUpdate($scope.user, function(response) {
+          if(response.status == 'unauthorised'){
+            $state.go('/');
+            ngToast.create({
+              className: 'warning',
+              content: 'You should log in first!'
+            });
+          }
+          else{
+            ngToast.create({
+              className: 'info',
+              content: 'Successfully updated!'
+            });
+          }
+        });
+      }
     };
 
     $scope.logout = function () {
