@@ -20,13 +20,13 @@ spaceApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('/', {
     url: '/',
-    templateUrl: '../views/home.html',
+    templateUrl: '../views/employee-login.html',
     controller: 'LoginCtrl',
     authenticate: false
   })
   .state('profile', {
     url: '/profile',
-    templateUrl: '../views/profile.html',
+    templateUrl: '../views/employee-profile.html',
     controller: 'ProfileCtrl',
     authenticate: true
   })
@@ -62,7 +62,7 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
 }]);
 
 spaceApp.config(['usSpinnerConfigProvider', function (usSpinnerConfigProvider) {
-    usSpinnerConfigProvider.setDefaults({color: '#3385ff'});
+  usSpinnerConfigProvider.setDefaults({color: '#3385ff'});
 }]);
 
 spaceApp.run(function($rootScope, $state, authService) {
