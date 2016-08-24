@@ -17,7 +17,8 @@ angular.module('loginController', [])
           if(response.status == 'pending verification') {
             ngToast.create({
               className: 'info',
-              content: 'Please verify your newly created account!',
+              timeout: 3000, 
+              content: 'Please verify your account! The verification link has already been e-mailed.',
             });
           }
 
@@ -76,7 +77,8 @@ angular.module('loginController', [])
           if (response.status == 'pending verification') {
             ngToast.create({
               className: 'info',
-              content: 'Please verify your newly created account!'
+              timeout: 3000, 
+              content: 'Please verify your new account! A verification link has been e-mailed.'
             });
           }
         });

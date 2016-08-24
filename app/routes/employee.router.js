@@ -82,22 +82,34 @@ router.get('/signup/verify', function(req, res) {
 router.post('/password', function(req, res) {
   const email = req.body.email;
   global.email = email;
-  const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-  const newUrl = fullUrl + '/reset';
-  console.log('ulr: ' + newUrl);
-  const user = {email: email, url: newUrl};
-  employeeController.password(user, function(err, docs) {
-    if(err) {
-      throw err;
+
+  const userdata = {email: email};
+  employeeController.checkUser(userdata, function(error, response) {
+    if (error) {
+      throw error;
     }
     else {
-      res.json(docs);
+      if(response.status === 'pending verification' || response.status == 'invalid user') {
+        res.json(response);
+      }
+      else {
+        const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+        const newUrl = fullUrl + '/reset';
+        const user = {email: email, url: newUrl};
+        employeeController.password(user, function(err, docs) {
+          if(err) {
+            throw err;
+          }
+          else {
+            res.json(docs);
+          }
+        });
+      }
     }
   });
 });
 
 router.get('/password/reset', function(req, res) {
-  console.log('password reset');
   res.sendFile(__dirname + '/reset-password.html');
 });
 

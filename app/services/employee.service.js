@@ -7,7 +7,11 @@ function findOne(user, cb) {
       throw err;
     }
     else {
-      if (res.verified == false) {
+      if(!res) {
+        res = {"status": "invalid user"};
+        return cb(null, res);
+      }
+      else if (res.verified == false) {
         res = {"status": "pending verification"};
         return cb(null, res);
       }
@@ -82,8 +86,6 @@ function verifyUser(user, cb) {
 }
 
 function resetPassword(user, cb) {
-  console.log('email: ' + user.email);
-  console.log('url: ' + user.url);
   const newUrl = user.url;
   const email = user.email;
   const smtpTransport = nodemailer.createTransport('SMTP', {
@@ -104,7 +106,6 @@ function resetPassword(user, cb) {
       throw error
     }
     else {
-      console.log('Mail sent!!');
       return cb(null, response);
     }
   });

@@ -57,11 +57,23 @@ function newpassword(user, cb) {
   });
 }
 
+function checkUser(user, cb) {
+  employeeService.findOne(user, function(err, res) {
+    if (err) {
+      throw err;
+    }
+    else {
+      cb(null, res);
+    }
+  });
+}
+
 module.exports = {
   login: login,
   signup: signup,
   update: update,
   verify: verify,
   password: password,
-  newpassword: newpassword
+  newpassword: newpassword,
+  checkUser: checkUser
 };

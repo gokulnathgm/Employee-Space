@@ -1,7 +1,9 @@
 const spaceApp = angular.module('spaceApp', [
   'ui.router', 
   'angularUtils.directives.dirPagination', 
-  'ngToast',
+  'ngAnimate', 
+  'ngSanitize', 
+  'ngToast', 
   'angularSpinner', 
   'loginController', 
   'profileController', 
@@ -52,8 +54,10 @@ spaceApp.config(['ngToastProvider', function(ngToast) {
   ngToast.configure({
     verticalPosition: 'bottom',
     horizontalPosition: 'center',
-    maxNumber: 3,
-    timeout: 2000
+    maxNumber: 1,
+    timeout: 2000,
+    dismissButton: true, 
+    animation: 'slide'
   });
 }]);
 
