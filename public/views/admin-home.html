@@ -3,7 +3,14 @@
     <div class="navbar-header" style="display:inline-block">
       <a class="navbar-brand" style="color:FFFFFF;" href="#">Employee Space</a>
     </div>
-    <button style="float:right;" class="btn btn-warning navbar-btn" type="button" ng-click="logoutAdmin()">Logout</button>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a ui-sref="/">Employee</a></li>
+        <li class="active"><a ui-sref="admin">Admin<span class="sr-only">(current)</span></a></li>
+      </ul>
+      <button style="float:right;" class="btn btn-warning navbar-btn" type="button" ng-click="logoutAdmin()">Logout</button>
+    </div>
+    
   </div>
 </nav>
 
